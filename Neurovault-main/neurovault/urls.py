@@ -1,12 +1,7 @@
 from django.contrib import admin
 from django.urls import path, include
-from django.http import HttpResponse
-
-def home(request):
-    return HttpResponse("Super ehh")
 
 urlpatterns = [
-    path('', home),
-    path('admin/', admin.site.urls),
+    path('', admin.site.urls),   # 👈 admin opens first
     path('api/', include('security.urls')),
 ]
